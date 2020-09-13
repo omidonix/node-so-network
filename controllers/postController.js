@@ -123,8 +123,7 @@ module.exports.createComment = async function(req,res,next) {
 //toye har do halat a stack darim ke . brtib rushva bade vaghteshiad birun
 module.exports.listComment = async function(req,res,next){
 
-
-  
+  console.time('comments')
   let commanets = await db.comment.findAll({
     where:{
       post_id: req.params.post_id
@@ -134,20 +133,22 @@ module.exports.listComment = async function(req,res,next){
   })
   var views= [];
 
+  console.timeLog('comments','2')
+
+
+
   if(commanets && commanets.length > 0){
-    //awaito bardaro bezar ta befahmi nodejs chetori kar mikone stackesh
-      await commanets.forEach( comment =>{
-      console.log('1')
-      let view =  _ejs.renderFile(__dirname+'/../views/components/comment_items.ejs', { 
+    for(let i = 0 , n = commanets.length; i < n; i++){
+      let comment = commanets[i]
+      console.timeLog('comments','3',i)
+      let view = await _ejs.renderFile(__dirname+'/../views/components/comment_items.ejs', { 
         comment: comment
-      }).then(view =>{
-        // console.log('2')
-        views.push(view)
       })
-      // console.log('3')
-    })
+      views.push(view)
+      console.timeLog('comments','4',i)
+    }
   }
-  // console.log('4')
+  console.timeLog('comments','5')
   res.setHeader('Content-Type', 'application/json');
   res.end(responseObj(false,views))
 }

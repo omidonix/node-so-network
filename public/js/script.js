@@ -550,7 +550,6 @@ $(function() {
 			}
 		})
 	})
-
 });//document ready end
 
 

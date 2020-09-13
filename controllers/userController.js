@@ -13,7 +13,6 @@ module.exports.createUser = async function(req,res,next){
 
   const err = validationResult(req);
   if (!err.isEmpty()) {
-    console.log('errrrrrrrr',err.mapped())
     res.render('pages/register', { hasError: true, err : err.mapped(), params : req.body});
   }
 

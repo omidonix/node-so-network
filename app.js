@@ -14,6 +14,8 @@ var {configPassport} = require('./config/passport')
 var passport = require('passport')
 var flash = require('connect-flash')
 
+
+
 var app = express();
 
 // parse application/x-www-form-urlencoded
@@ -31,12 +33,14 @@ app.use(cookieParser());
 app.use('/',express.static(path.join(__dirname, 'public')));
 app.use('/upload',express.static(path.join(__dirname, 'upload_dir')));
 
-
-app.use(session({ secret: 'keyboard cat',resave: true,
-saveUninitialized: true }));
+let sessionMiddleware = session({ secret: 'keyboard cat',resave: true,
+saveUninitialized: true })
+app.use(sessionMiddleware)
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 
 passport.use(configPassport)
 
@@ -62,5 +66,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+
+module.exports.app = app;
+module.exports.sessionMiddleware = sessionMiddleware;
 
